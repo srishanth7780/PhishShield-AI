@@ -20,7 +20,11 @@ import {
   Cpu,
 } from "lucide-react";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const API_URL =
+  (process.env.NEXT_PUBLIC_API_URL && process.env.NEXT_PUBLIC_API_URL.replace(/\/$/, "")) ||
+  (typeof window !== "undefined" && window.location.hostname !== "localhost"
+    ? ""
+    : "http://localhost:8000");
 
 const QUICK_PROMPTS = [
   { label: "⚡ Stark, how do I stay safe?", query: "Stark, what are your top security tips to keep my data safe online?" },
