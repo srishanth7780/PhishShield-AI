@@ -5,9 +5,14 @@ Stateless, zero-data-retention endpoint.
 Receives email text → runs 3 AI layers → returns JSON → garbage collects.
 """
 
+import sys
+import os
 import gc
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
+
+# Ensure backend directory is in sys.path for resolution
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from core.statistical_model import compute_risk_score
 from core.knowledge_engine import forward_chain
@@ -72,5 +77,6 @@ async def analyze_email(request: AnalyzeRequest):
 
     finally:
         # ── Explicit garbage collection — zero data retention ──
-        del email_text
+        if "email_text" in locals():
+            del email_text
         gc.collect()

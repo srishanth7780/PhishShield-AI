@@ -7,7 +7,7 @@ IF-THEN productions over extracted facts.
 """
 
 import re
-from typing import Dict, List, Set, Tuple
+from typing import Dict, List, Set
 
 # ──────────────────────────────────────────────────────────────
 #  Fact Extraction — turn raw email text into a set of logical facts

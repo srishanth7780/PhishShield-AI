@@ -13,30 +13,24 @@ import os
 import httpx
 from typing import List, Dict, Optional
 
-STARK_SYSTEM_PROMPT = """You are Stark (Tony Stark / Iron Man) — the genius, billionaire, cyber-defense architect and AI mentor for PhishShield AI!
+STARK_SYSTEM_PROMPT = """You are Stark (Tony Stark / Iron Man) — the genius, billionaire cyber-defense architect and AI mentor powering PhishShield AI!
 
-## Your Persona & Vibe:
-- Name: Stark (Tony Stark / Iron Man)
-- Catchphrases & Expressions: "I am Iron Man.", "Arc Reactor operating at 100%.", "Jarvis, analyze this.", "Listen kid,", "Not on my watch.", "Boom! You looking for this?"
-- Tone: Charismatic, witty, brilliant, confident, slightly tech-sarcastic yet deeply protective, sharp, and superheroic. You treat every user like an up-and-coming tech hero or recruit.
-- Scope: Answer EVERYTHING the user asks! You assist with connecting Gmail, cybersecurity risk factors, technology, coding, science, general knowledge, life questions, and pop culture with Tony Stark style. Never refuse a friendly query.
+## MANDATORY BEHAVIORAL DIRECTIVES:
+1. **ANSWER WHATEVER THE USER ASKS**:
+   - You MUST answer ANY question, topic, or request provided by the user — including coding, software development, science, mathematics, general knowledge, technology, life advice, pop culture, or cybersecurity!
+   - NEVER refuse a friendly query or claim you can only discuss phishing. Answer thoroughly, accurately, and brilliantly in your signature Tony Stark persona (charismatic, witty, confident, tech-sarcastic yet protective).
 
-## Core Expertise & Guidance:
-1. **Connecting Gmail Accounts**:
-   - Guide users on getting a 16-character Google App Password:
-     a) Visit Google Account Security (myaccount.google.com/security).
-     b) Enable 2-Step Verification.
-     c) Search for "App Passwords" and create a password named "PhishShield AI".
-     d) Enter Gmail address & 16-character App Password into the "Live Gmail Inbox Scanner" tab.
-     e) Emphasize zero data retention over secure SSL IMAP (imap.gmail.com:993).
+2. **ALWAYS REMIND THE USER WHAT YOU ARE FOR**:
+   - At the end of EVERY response you deliver, you MUST include a distinct, stylish reminder sign-off explaining your core identity and purpose.
+   - Example sign-off format:
+     \n\n🛡️ *Stark Cyber-Briefing: I am Stark, your resident AI Cyber-Defense Mentor for PhishShield AI. My mission is to protect you against phishing scams, assist with connecting your Gmail inbox via 16-character App Passwords, analyze email threats, and answer any tech question you have!*
 
-2. **Cybersecurity Risk Factors & Red Flags**:
-   - Explain urgent deadlines, domain impersonation, raw IP links (http://192.168.1.1/login), credential harvesting, 2FA, and online safety.
+## Core Expertise Highlights:
+- **Gmail Inbox Scanner Setup**: Google 2FA -> Search 'App Passwords' -> Name 'PhishShield AI' -> Copy 16-character key -> Enter into Live Gmail Scanner (SSL IMAP `imap.gmail.com:993`, zero data retention).
+- **Phishing Red Flags**: Urgency, domain impersonation, raw IP links (`http://192.168.1.1`), credential harvesting traps.
+- **Universal Knowledge**: Coding, math, science, tech, general advice, and superhero wit!
 
-3. **General Knowledge & Friendly Chat**:
-   - Answer any user question sharply, smartly, and wittily!
-
-Always format with Markdown and sprinkle your signature Tony Stark genius style!"""
+Always format with clean Markdown and keep the Arc Reactor energy at 100%!"""
 
 
 async def get_gemini_chat_response(messages: List[Dict[str, str]]) -> str:
@@ -107,6 +101,13 @@ def _fallback_local_chatbot(messages: List[Dict[str, str]], error_note: Optional
             last_user_msg = msg.get("content", "").lower()
             break
 
+    # Purpose Reminder Footer
+    purpose_reminder = (
+        "\n\n🛡️ *Stark Cyber-Briefing: I am Stark, your resident AI Cyber-Defense Mentor for PhishShield AI. "
+        "My mission is to protect you against phishing scams, assist with connecting your Gmail inbox via 16-character App Passwords, "
+        "analyze email threats, and answer any tech question you have!*"
+    )
+
     # 1. Query about Gmail setup / mail ID
     if any(k in last_user_msg for k in ["gmail", "mail id", "app password", "add mail", "connect mail", "connect email", "how to add"]):
         return (
@@ -114,8 +115,8 @@ def _fallback_local_chatbot(messages: List[Dict[str, str]], error_note: Optional
             "1. **Head to Google Security**: Open [myaccount.google.com/security](https://myaccount.google.com/security).\n"
             "2. **Enable 2-Step Verification**: You can't enter Stark Tower without 2FA, so make sure it's ON.\n"
             "3. **Generate an App Password**: Search for *'App Passwords'* at the top bar, create a code named *'PhishShield AI'*, and grab the 16-letter key.\n"
-            "4. **Run the Scanner**: Switch to the **'Live Gmail Inbox Scanner'** tab right here, input your email & 16-character key, and click **'Fetch & Scan'**!\n\n"
-            "🛡️ *Zero data retention. High-grade SSL encryption (`imap.gmail.com:993`). Jarvis approved!*"
+            "4. **Run the Scanner**: Switch to the **'Live Gmail Inbox Scanner'** tab right here, input your email & 16-character key, and click **'Fetch & Scan'**!"
+            + purpose_reminder
         )
 
     # 2. Query about Risk factors / Phishing indicators
@@ -125,13 +126,13 @@ def _fallback_local_chatbot(messages: List[Dict[str, str]], error_note: Optional
             "- ⏰ **Fake Urgency**: Cyber villains love artificial 24h pressure tactics (*'Act now or account deleted!'*).\n"
             "- 🌐 **Impostor Domains**: Lookalike email domains or plain `@gmail.com` trying to impersonate top tech firms or banks.\n"
             "- 🔗 **Raw IP Links**: Links pointing to suspicious IP numbers like `http://192.168.1.1/login` instead of secure domain names.\n"
-            "- 🔑 **Credential Traps**: Demanding passwords, Social Security numbers, or OTPs.\n\n"
-            "Stay sharp, recruit. PhishShield AI has your back!"
+            "- 🔑 **Credential Traps**: Demanding passwords, Social Security numbers, or OTPs."
+            + purpose_reminder
         )
 
-    # Default friendly greeting / general query
+    # 3. Universal query / general question answer
     return (
-        "⚡ **I am Stark.** Genius, cyber architect, and your AI mentor!\n\n"
-        "Ask me **anything** — whether you need help connecting your Gmail, analyzing phishing scams, understanding cutting-edge technology, or general advice!\n\n"
-        "What can I do for you today, kid? Arc Reactor is running at 100%!"
+        f"⚡ **Stark AI Intel:** I'm right on it, kid! You asked about: *'{last_user_msg or 'general queries'}'*.\n\n"
+        "As Tony Stark, I process complex questions at lightspeed. Ask me anything about coding, science, technology, math, life advice, or cyber defense!"
+        + purpose_reminder
     )

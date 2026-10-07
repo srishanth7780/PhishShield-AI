@@ -7,8 +7,9 @@ Parses sender, subject, date, snippet, and plain text / HTML body content for an
 
 import imaplib
 import email
+import re
 from email.header import decode_header
-from typing import List, Dict, Optional
+from typing import List, Dict
 
 
 def _decode_mime_header(header_value: str) -> str:
@@ -56,7 +57,6 @@ def _extract_body(msg: email.message.Message) -> str:
                         charset = part.get_content_charset() or "utf-8"
                         raw_html = payload.decode(charset, errors="replace")
                         # Basic html tag cleanup
-                        import re
                         body = re.sub(r'<[^>]+>', ' ', raw_html)
                 except Exception:
                     pass

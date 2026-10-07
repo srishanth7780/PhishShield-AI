@@ -27,7 +27,7 @@ const API_URL =
     : "http://localhost:8000");
 
 const QUICK_PROMPTS = [
-  { label: "⚡ Stark, how do I stay safe?", query: "Stark, what are your top security tips to keep my data safe online?" },
+  { label: "💡 Ask Stark Anything", query: "Stark, explain quantum computing and tell me what your primary mission is!" },
   { label: "🔑 Connect Gmail Guide", query: "Stark, how do I connect my Gmail address and 16-character App Password?" },
   { label: "🚨 Phishing Red Flags", query: "What are the main risk factors and red flags of a scam email?" },
   { label: "🛡️ 3-Layer Engine Explained", query: "How does PhishShield's 3-layer anti-phishing detection engine work?" },
@@ -36,7 +36,7 @@ const QUICK_PROMPTS = [
 const INITIAL_WELCOME = {
   role: "assistant",
   content:
-    "⚡ **I AM STARK.** ⚡\n\nGenius, cyber-defense architect, and your AI mentor! 🦾\n\nWhether you need help **connecting your Gmail inbox**, analyzing **scam risk factors**, or building your cyber defenses against online villains, I'm here to back you up.\n\nWhat can I solve for you today, kid? Arc Reactor is operating at 100%!",
+    "⚡ **I AM STARK.** ⚡\n\nGenius, billionaire cyber-defense architect, and your AI mentor! 🦾\n\nAsk me **ANYTHING** you want — from coding, science, mathematics, and general knowledge, to cybersecurity!\n\n🛡️ *Mission Reminder: I am Stark, built for **PhishShield AI** to protect you from phishing scams, guide your Gmail connection, analyze email threats, and keep your digital life secure!*",
 };
 
 export default function CyberChatbot() {

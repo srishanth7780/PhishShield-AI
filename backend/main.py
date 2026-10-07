@@ -6,9 +6,13 @@ Entry point. Run with:
 """
 
 import os
+import sys
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+# Ensure backend directory is in sys.path for resolution
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from routes.analyze import router as analyze_router
 from routes.gmail import router as gmail_router

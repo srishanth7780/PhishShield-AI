@@ -5,9 +5,14 @@ Secure, stateless endpoints that connect to Gmail over SSL IMAP,
 fetch incoming emails, and run 3-layer anti-phishing analysis on demand.
 """
 
+import sys
+import os
 from typing import List, Optional
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel, Field, EmailStr
+from pydantic import BaseModel, Field
+
+# Ensure backend directory is in sys.path for resolution
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from core.gmail_service import fetch_gmail_inbox
 from core.statistical_model import compute_risk_score
@@ -74,7 +79,7 @@ async def analyze_gmail_message(request: GmailAnalyzeRequest):
     Runs 3-layer scam analysis directly on an incoming Gmail message.
     """
     email_text = request.email_text
-    if not email_text or len(email_text.trim() if hasattr(email_text, 'trim') else email_text) < 5:
+    if not email_text or len(email_text.strip()) < 5:
         raise HTTPException(status_code=400, detail="Email content is too short for analysis.")
 
     try:

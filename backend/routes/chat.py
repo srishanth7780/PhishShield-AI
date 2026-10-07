@@ -5,9 +5,14 @@ Multi-turn conversational chatbot powered by Google Gemini API.
 Answers queries regarding Gmail setup, cyber risk factors, and platform usage.
 """
 
-from typing import List, Dict, Optional
+import sys
+import os
+from typing import List
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
+
+# Ensure backend directory is in sys.path for resolution
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from core.gemini_chat_service import get_gemini_chat_response
 
